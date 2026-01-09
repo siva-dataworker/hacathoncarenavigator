@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %}Talk to Assistant - Care Navigator{% endblock %}
+
+{% block content %}
+<div class="page">
+    <div class="chat-container">
+        <div class="chat-header">
+            <h1>
+                🏥 Symptom Triage Assistant
+                <span class="chat-subtitle">AI Care Assistant</span>
+            </h1>
+            <p>Get personalized care recommendations</p>
+        </div>
+
+        <div class="chat-messages" id="chatMessages">
+            <!-- Messages will be added here dynamically -->
+        </div>
+
+        <div class="chat-input-container">
+            <textarea 
+                id="chatInput" 
+                placeholder="Describe your symptoms..." 
+                rows="2"
+            ></textarea>
+            <button id="sendBtn">Send</button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+{% load static %}
+<script src="{% static 'js/chat.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,92 @@
+[
+  {
+    "model": "api.clinic",
+    "pk": 1,
+    "fields": {
+      "name": "Apollo Health Center - Anna Nagar",
+      "address": "No. 45, 2nd Avenue, Anna Nagar West, Chennai - 600040, Tamil Nadu",
+      "unique_code": "apollo-anna-nagar",
+      "created_at": "2025-01-01T09:00:00Z"
+    }
+  },
+  {
+    "model": "api.clinic",
+    "pk": 2,
+    "fields": {
+      "name": "Fortis Malar Hospital - Adyar",
+      "address": "No. 52, Gandhi Nagar, 1st Main Road, Adyar, Chennai - 600020, Tamil Nadu",
+      "unique_code": "fortis-adyar",
+      "created_at": "2025-01-01T09:00:00Z"
+    }
+  },
+  {
+    "model": "api.appointment",
+    "pk": 1,
+    "fields": {
+      "clinic": 1,
+      "patient_name": "Rajesh Kumar",
+      "patient_phone": "9876543210",
+      "symptoms_summary": "Persistent headache for 3 days, mild fever",
+      "urgency_level": "medium",
+      "preferred_time": "2025-01-10T10:00:00Z",
+      "created_at": "2025-01-08T14:30:00Z",
+      "status": "confirmed"
+    }
+  },
+  {
+    "model": "api.appointment",
+    "pk": 2,
+    "fields": {
+      "clinic": 1,
+      "patient_name": "Priya Sharma",
+      "patient_phone": "9876543211",
+      "symptoms_summary": "Cough and cold for 5 days, throat pain",
+      "urgency_level": "low",
+      "preferred_time": "2025-01-10T14:30:00Z",
+      "created_at": "2025-01-08T15:45:00Z",
+      "status": "pending"
+    }
+  },
+  {
+    "model": "api.appointment",
+    "pk": 3,
+    "fields": {
+      "clinic": 2,
+      "patient_name": "Arun Venkatesh",
+      "patient_phone": "9876543212",
+      "symptoms_summary": "Back pain after lifting heavy objects, difficulty in movement",
+      "urgency_level": "medium",
+      "preferred_time": "2025-01-11T09:30:00Z",
+      "created_at": "2025-01-08T16:20:00Z",
+      "status": "confirmed"
+    }
+  },
+  {
+    "model": "api.appointment",
+    "pk": 4,
+    "fields": {
+      "clinic": 2,
+      "patient_name": "Lakshmi Iyer",
+      "patient_phone": "9876543213",
+      "symptoms_summary": "Stomach pain and nausea since morning",
+      "urgency_level": "medium",
+      "preferred_time": "2025-01-11T11:00:00Z",
+      "created_at": "2025-01-08T17:10:00Z",
+      "status": "pending"
+    }
+  },
+  {
+    "model": "api.appointment",
+    "pk": 5,
+    "fields": {
+      "clinic": 1,
+      "patient_name": "Mohammed Farhan",
+      "patient_phone": "9876543214",
+      "symptoms_summary": "Skin rash on arms, itching",
+      "urgency_level": "low",
+      "preferred_time": "2025-01-12T16:00:00Z",
+      "created_at": "2025-01-08T18:00:00Z",
+      "status": "pending"
+    }
+  }
+]

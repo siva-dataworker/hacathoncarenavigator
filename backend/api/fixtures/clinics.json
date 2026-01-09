@@ -1,0 +1,29 @@
+[
+  {
+    "model": "api.clinic",
+    "pk": 1,
+    "fields": {
+      "name": "Apollo Hospitals Chennai",
+      "address": "21, Greams Lane, Off Greams Road, Chennai - 600006",
+      "unique_code": "apollo-chennai"
+    }
+  },
+  {
+    "model": "api.clinic",
+    "pk": 2,
+    "fields": {
+      "name": "Fortis Malar Hospital",
+      "address": "52, 1st Main Road, Gandhi Nagar, Adyar, Chennai - 600020",
+      "unique_code": "fortis-chennai"
+    }
+  },
+  {
+    "model": "api.clinic",
+    "pk": 3,
+    "fields": {
+      "name": "MIOT International",
+      "address": "4/112, Mount Poonamallee Road, Manapakkam, Chennai - 600089",
+      "unique_code": "miot-chennai"
+    }
+  }
+]

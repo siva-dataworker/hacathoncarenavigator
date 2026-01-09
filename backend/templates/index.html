@@ -1,0 +1,171 @@
+{% extends 'base.html' %}
+
+{% block title %}Care Navigator - Smart Clinic Front Desk{% endblock %}
+
+{% block content %}
+<div class="landing-page">
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-content">
+            <h1 class="hero-title">
+                Smart AI Front Desk for Your Clinic
+            </h1>
+            <p class="hero-subtitle">
+                24/7 AI assistant that talks to patients, takes symptoms, and books appointments automatically
+            </p>
+            
+            <div class="hero-buttons">
+                <a href="/clinics" class="btn btn-primary btn-large">
+                    🏥 Find Your Clinic
+                </a>
+                <a href="/dashboard" class="btn btn-outline btn-large">
+                    🎯 Clinic Dashboard (Demo)
+                </a>
+            </div>
+        </div>
+    </section>
+    
+    <!-- How Patients Use It -->
+    <section class="how-it-works-section">
+        <h2 class="section-title">Two Ways to Book Appointments</h2>
+        
+        <div class="steps-grid">
+            <div class="step-card highlight-card">
+                <div class="step-icon">🔗</div>
+                <h3 class="step-title">Way 1: Direct Clinic Link (Preferred)</h3>
+                <p class="step-description">
+                    Click your clinic's unique link → Chat with clinic AI → Book appointment
+                </p>
+                <div class="step-example">
+                    Example: carenavigator.com/clinic/apollo-anna-nagar
+                </div>
+            </div>
+            
+            <div class="step-card">
+                <div class="step-icon">🔍</div>
+                <h3 class="step-title">Way 2: Platform Search</h3>
+                <p class="step-description">
+                    Visit platform → Search for clinic → Chat with clinic AI → Book appointment
+                </p>
+                <a href="/clinics" class="btn btn-sm btn-primary" style="margin-top: 16px;">
+                    Search Clinics
+                </a>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Key Features Section -->
+    <section class="features-section">
+        <h2 class="section-title">What Makes This Different</h2>
+        
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🤖</div>
+                <h3 class="feature-title">Clinic-Specific AI</h3>
+                <p class="feature-description">
+                    Each clinic gets its own AI assistant with real clinic data - not generic chatbot
+                </p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">⏰</div>
+                <h3 class="feature-title">24/7 Availability</h3>
+                <p class="feature-description">
+                    Patients can book anytime - no waiting for office hours or phone calls
+                </p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">✅</div>
+                <h3 class="feature-title">Real Clinic Data</h3>
+                <p class="feature-description">
+                    AI uses only clinic's actual data - no wrong answers, no double bookings
+                </p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">🚨</div>
+                <h3 class="feature-title">Emergency Detection</h3>
+                <p class="feature-description">
+                    Automatically detects critical symptoms and provides immediate guidance
+                </p>
+            </div>
+        </div>
+    </section>
+    
+    <!-- For Clinics Section -->
+    <section class="for-clinics-section">
+        <h2 class="section-title">Why Clinics Choose Us</h2>
+        
+        <div class="benefits-grid">
+            <div class="benefit-card">
+                <div class="benefit-icon">📞</div>
+                <h3 class="benefit-title">60-80% Fewer Calls</h3>
+                <p class="benefit-description">
+                    AI handles routine queries automatically
+                </p>
+            </div>
+            
+            <div class="benefit-card">
+                <div class="benefit-icon">⏱️</div>
+                <h3 class="benefit-title">2-3 Hours Saved Daily</h3>
+                <p class="benefit-description">
+                    Front desk staff focus on in-person patients
+                </p>
+            </div>
+            
+            <div class="benefit-card">
+                <div class="benefit-icon">💰</div>
+                <h3 class="benefit-title">Lower Costs</h3>
+                <p class="benefit-description">
+                    Replaces expensive appointment software
+                </p>
+            </div>
+            
+            <div class="benefit-card">
+                <div class="benefit-icon">😊</div>
+                <h3 class="benefit-title">Better Experience</h3>
+                <p class="benefit-description">
+                    Patients get instant responses 24/7
+                </p>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Quick Demo Section -->
+    <section class="quick-demo-section">
+        <div class="quick-demo-content">
+            <h2 class="section-title">Try It Now</h2>
+            <p class="section-subtitle">
+                Experience both ways patients can book appointments
+            </p>
+            
+            <div class="demo-links">
+                <a href="/clinic/6" class="demo-link-btn highlight-btn">
+                    <span class="demo-link-icon">🔗</span>
+                    <span class="demo-link-text">
+                        <strong>Direct Clinic Link</strong>
+                        <small>Apollo Health Center AI Assistant</small>
+                    </span>
+                </a>
+                
+                <a href="/clinics" class="demo-link-btn">
+                    <span class="demo-link-icon">🔍</span>
+                    <span class="demo-link-text">
+                        <strong>Platform Search</strong>
+                        <small>Find and book with any clinic</small>
+                    </span>
+                </a>
+                
+                <a href="/dashboard" class="demo-link-btn">
+                    <span class="demo-link-icon">📊</span>
+                    <span class="demo-link-text">
+                        <strong>Clinic Dashboard</strong>
+                        <small>See how clinics manage bookings</small>
+                    </span>
+                </a>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}

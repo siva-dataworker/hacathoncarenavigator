@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ clinic.name }} - Care Navigator{% endblock %}
+
+{% block extra_css %}
+<style>
+.clinic-page {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+.clinic-header {
+    background: white;
+    border-radius: 16px;
+    padding: 40px;
+    text-align: center;
+    box-shadow: var(--shadow-lg);
+    margin-bottom: 32px;
+}
+
+.clinic-header h1 {
+    font-size: 2rem;
+    margin-bottom: 16px;
+    color: var(--gray-900);
+}
+
+.clinic-header p {
+    color: var(--gray-600);
+    font-size: 1.125rem;
+}
+
+.booking-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 24px;
+}
+
+.option-card {
+    background: white;
+    border-radius: 16px;
+    padding: 32px;
+    text-align: center;
+    box-shadow: var(--shadow-md);
+    transition: all 0.2s;
+}
+
+.option-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+}
+
+.option-icon {
+    font-size: 4rem;
+    margin-bottom: 16px;
+}
+
+.option-card h3 {
+    font-size: 1.5rem;
+    margin-bottom: 12px;
+    color: var(--gray-900);
+}
+
+.option-card p {
+    color: var(--gray-600);
+    margin-bottom: 24px;
+    line-height: 1.6;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="clinic-page">
+    <div class="clinic-header">
+        <div class="option-icon">🏥</div>
+        <h1>{{ clinic.name }}</h1>
+        <p>📍 {{ clinic.address }}</p>
+    </div>
+
+    <h2 style="text-align: center; color: white; margin-bottom: 32px;">
+        How would you like to proceed?
+    </h2>
+
+    <div class="booking-options">
+        <div class="option-card">
+            <div class="option-icon">💬</div>
+            <h3>Talk to Care Assistant</h3>
+            <p>Describe your symptoms and get AI-powered triage before booking</p>
+            <a href="/clinic/{{ clinic.id }}/chat" class="btn btn-primary btn-large btn-block">
+                Start Chat
+            </a>
+        </div>
+
+        <div class="option-card">
+            <div class="option-icon">📅</div>
+            <h3>Book Appointment Directly</h3>
+            <p>Skip the chat and schedule your visit right away</p>
+            <a href="/booking?clinic={{ clinic.id }}" class="btn btn-secondary btn-large btn-block">
+                Book Now
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

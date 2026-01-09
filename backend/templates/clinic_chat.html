@@ -1,0 +1,263 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ clinic.name }} - AI Assistant{% endblock %}
+
+{% block content %}
+<div class="page">
+    <div class="chat-container">
+        <div class="chat-header">
+            <h1>
+                🏥 {{ clinic.name }}
+                <span class="chat-subtitle">AI Care Agent</span>
+            </h1>
+            <p>Intelligent agent for symptom assessment and appointment booking</p>
+        </div>
+
+        <div class="chat-messages" id="chatMessages">
+            <!-- Messages will be added here dynamically -->
+        </div>
+
+        <div class="chat-input-container" id="chatInputContainer">
+            <textarea 
+                id="chatInput" 
+                placeholder="Describe your symptoms..." 
+                rows="2"
+            ></textarea>
+            <button id="sendBtn">Send</button>
+        </div>
+        
+        <!-- New Session Button (hidden by default) -->
+        <div class="new-session-container" id="newSessionContainer" style="display: none;">
+            <button class="btn btn-primary btn-block" onclick="startNewSession()">
+                🔄 Start New Session
+            </button>
+        </div>
+    </div>
+</div>
+
+<style>
+.new-session-container {
+    padding: 20px;
+    background: white;
+    border-top: 1px solid #e0e0e0;
+    text-align: center;
+}
+
+.new-session-container .btn {
+    max-width: 300px;
+    margin: 0 auto;
+}
+</style>
+{% endblock %}
+
+{% block extra_js %}
+{% load static %}
+<script>
+// Clinic-specific chat functionality
+const clinicId = {{ clinic.id }};
+const clinicName = "{{ clinic.name }}";
+let sessionId = null;
+let isLoading = false;
+let bookingCompleted = false;
+
+const chatMessages = document.getElementById('chatMessages');
+const chatInput = document.getElementById('chatInput');
+const sendBtn = document.getElementById('sendBtn');
+const chatInputContainer = document.getElementById('chatInputContainer');
+const newSessionContainer = document.getElementById('newSessionContainer');
+
+// Start session on page load
+async function startSession() {
+    try {
+        const response = await fetch('/api/chat/start', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: '{}'
+        });
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        sessionId = data.id;
+        
+        // Custom greeting for clinic
+        const greeting = `Hi! I'm the ${clinicName} AI agent. I'm here to help assess your symptoms and book appointments. What brings you here today?`;
+        addMessage('agent', greeting);
+    } catch (error) {
+        console.error('Failed to start session:', error);
+        addMessage('agent', 'Sorry, something went wrong. Please refresh the page.');
+    }
+}
+
+// Start new session after booking
+async function startNewSession() {
+    // Clear chat
+    chatMessages.innerHTML = '';
+    
+    // Reset state
+    bookingCompleted = false;
+    sessionId = null;
+    
+    // Show input, hide new session button
+    chatInputContainer.style.display = 'flex';
+    newSessionContainer.style.display = 'none';
+    
+    // Enable input
+    chatInput.disabled = false;
+    sendBtn.disabled = false;
+    chatInput.placeholder = "Describe your symptoms...";
+    chatInput.value = '';
+    
+    // Start new session
+    await startSession();
+}
+
+// Add message to chat
+function addMessage(role, content, isWarning = false) {
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `message ${role}${isWarning ? ' warning' : ''}`;
+    
+    const contentDiv = document.createElement('div');
+    contentDiv.className = 'message-content';
+    contentDiv.textContent = content;
+    
+    messageDiv.appendChild(contentDiv);
+    chatMessages.appendChild(messageDiv);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+// Show typing indicator
+function showTyping() {
+    const typingDiv = document.createElement('div');
+    typingDiv.className = 'message agent';
+    typingDiv.id = 'typing-indicator';
+    typingDiv.innerHTML = `
+        <div class="typing-indicator">
+            <span></span><span></span><span></span>
+        </div>
+    `;
+    chatMessages.appendChild(typingDiv);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+// Remove typing indicator
+function hideTyping() {
+    const typing = document.getElementById('typing-indicator');
+    if (typing) {
+        typing.remove();
+    }
+}
+
+// Send message
+async function sendMessage() {
+    if (!chatInput.value.trim() || !sessionId || isLoading) return;
+    
+    const message = chatInput.value.trim();
+    chatInput.value = '';
+    
+    addMessage('user', message);
+    isLoading = true;
+    sendBtn.disabled = true;
+    showTyping();
+    
+    try {
+        const response = await fetch('/api/chat/continue', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                session_id: sessionId,
+                message: message
+            })
+        });
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        console.log('API Response:', data);  // Debug log
+        hideTyping();
+        
+        // Show trigger warning if present
+        if (data.trigger_warning) {
+            addMessage('assistant', data.trigger_warning, true);
+        }
+        
+        // Show main message
+        if (data.message) {
+            addMessage('assistant', data.message);
+        }
+        
+        // Check if booking is confirmed
+        if (data.booking_confirmed) {
+            // Booking complete! Hide input, show new session button
+            bookingCompleted = true;
+            chatInputContainer.style.display = 'none';
+            newSessionContainer.style.display = 'block';
+            return;
+        }
+        
+        // Handle triage completion - let AI continue conversation for booking
+        if (data.should_triage && data.triage_result === 'clinic') {
+            // Don't show booking button - let AI ask for timing
+            // The AI will guide the user through the booking process
+        } else if (data.should_triage && data.triage_result === 'emergency') {
+            // Emergency - disable input
+            sendBtn.disabled = true;
+            chatInput.disabled = true;
+        }
+        
+    } catch (error) {
+        console.error('Failed to send message:', error);
+        hideTyping();
+        addMessage('agent', 'Sorry, something went wrong. Please try again.');
+    } finally {
+        isLoading = false;
+        if (!chatInput.disabled && !bookingCompleted) {
+            sendBtn.disabled = false;
+        }
+    }
+}
+
+// Show booking button
+function showBookingButton() {
+    const bookingDiv = document.createElement('div');
+    bookingDiv.className = 'booking-options-container';
+    bookingDiv.innerHTML = `
+        <h3>Ready to book your appointment?</h3>
+        <p class="booking-options-subtitle">We'll help you schedule a visit with ${clinicName}</p>
+        
+        <div style="max-width: 400px; margin: 0 auto;">
+            <button class="btn btn-primary btn-large btn-block" onclick="window.location.href='/booking?clinic=${clinicId}'">
+                📅 Book Appointment Now
+            </button>
+        </div>
+    `;
+    
+    chatMessages.appendChild(bookingDiv);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+    
+    // Disable input
+    chatInput.disabled = true;
+    sendBtn.disabled = true;
+}
+
+// Event listeners
+sendBtn.addEventListener('click', sendMessage);
+chatInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage();
+    }
+});
+
+// Initialize
+startSession();
+</script>
+{% endblock %}

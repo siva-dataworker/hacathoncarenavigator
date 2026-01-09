@@ -1,0 +1,155 @@
+{% extends 'base.html' %}
+
+{% block title %}Clinic Dashboard - Care Navigator{% endblock %}
+
+{% block extra_css %}
+<style>
+.dashboard-page {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+.dashboard-header {
+    background: white;
+    border-radius: 16px;
+    padding: 32px;
+    margin-bottom: 32px;
+    box-shadow: var(--shadow-md);
+}
+
+.dashboard-header h1 {
+    font-size: 2rem;
+    margin-bottom: 8px;
+    color: var(--gray-900);
+}
+
+.appointments-section {
+    background: white;
+    border-radius: 16px;
+    padding: 32px;
+    box-shadow: var(--shadow-md);
+}
+
+.appointments-table {
+    width: 100%;
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th {
+    background: var(--gray-100);
+    padding: 12px;
+    text-align: left;
+    font-weight: 600;
+    color: var(--gray-700);
+    border-bottom: 2px solid var(--gray-300);
+}
+
+td {
+    padding: 12px;
+    border-bottom: 1px solid var(--gray-200);
+}
+
+.urgency-badge {
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.urgency-badge.high {
+    background: #fee;
+    color: #c00;
+}
+
+.urgency-badge.medium {
+    background: #ffeaa7;
+    color: #d63031;
+}
+
+.urgency-badge.low {
+    background: #d4edda;
+    color: #155724;
+}
+
+.status-badge {
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.status-badge.pending {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.status-badge.confirmed {
+    background: #d4edda;
+    color: #155724;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-page">
+    <div class="dashboard-header">
+        <h1>🏥 Clinic Dashboard</h1>
+        <p>Manage appointments and view patient bookings</p>
+    </div>
+
+    <div class="appointments-section">
+        <h2 style="margin-bottom: 24px;">Recent Appointments</h2>
+        
+        {% if appointments %}
+        <div class="appointments-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Patient</th>
+                        <th>Clinic</th>
+                        <th>Date & Time</th>
+                        <th>Symptoms</th>
+                        <th>Urgency</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for appointment in appointments %}
+                    <tr>
+                        <td>#{{ appointment.id }}</td>
+                        <td>{{ appointment.patient_name }}</td>
+                        <td>{{ appointment.clinic.name }}</td>
+                        <td>{{ appointment.appointment_date }} {{ appointment.appointment_time }}</td>
+                        <td style="max-width: 300px;">{{ appointment.symptoms_summary|truncatewords:10 }}</td>
+                        <td>
+                            <span class="urgency-badge {{ appointment.urgency_level }}">
+                                {{ appointment.urgency_level }}
+                            </span>
+                        </td>
+                        <td>
+                            <span class="status-badge {{ appointment.status }}">
+                                {{ appointment.status }}
+                            </span>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p style="text-align: center; color: var(--gray-600); padding: 40px;">
+            No appointments yet. Start booking to see them here!
+        </p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

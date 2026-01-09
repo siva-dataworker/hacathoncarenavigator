@@ -1,0 +1,329 @@
+{% extends 'base.html' %}
+
+{% block title %}Book Appointment - Care Navigator{% endblock %}
+
+{% block extra_css %}
+<style>
+.booking-page {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+.booking-container {
+    background: white;
+    border-radius: 16px;
+    padding: 40px;
+    box-shadow: var(--shadow-lg);
+}
+
+.booking-container h2 {
+    text-align: center;
+    margin-bottom: 32px;
+    color: var(--gray-900);
+}
+
+.form-group {
+    margin-bottom: 24px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: var(--gray-700);
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid var(--gray-300);
+    border-radius: 8px;
+    font-size: 1rem;
+    font-family: inherit;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--primary-blue);
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.date-time-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.submit-btn {
+    width: 100%;
+    padding: 16px;
+    background: var(--primary-blue);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.125rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.submit-btn:hover {
+    background: #5568d3;
+    transform: translateY(-2px);
+}
+
+.submit-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.success-message {
+    text-align: center;
+    padding: 60px 40px;
+}
+
+.success-icon {
+    font-size: 64px;
+    margin-bottom: 24px;
+}
+
+.success-message h2 {
+    color: var(--secondary-green);
+    margin-bottom: 16px;
+}
+
+.booking-details {
+    background: var(--gray-100);
+    padding: 24px;
+    border-radius: 12px;
+    margin: 24px 0;
+    text-align: left;
+}
+
+.booking-details p {
+    margin: 12px 0;
+    color: var(--gray-700);
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .booking-page {
+        padding: 20px 10px;
+    }
+    
+    .booking-container {
+        padding: 24px 16px;
+        border-radius: 0;
+    }
+    
+    .booking-container h2 {
+        font-size: 1.5rem;
+        margin-bottom: 24px;
+    }
+    
+    .date-time-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .form-group {
+        margin-bottom: 20px;
+    }
+    
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        font-size: 16px; /* Prevents zoom on iOS */
+    }
+    
+    .submit-btn {
+        padding: 14px;
+        font-size: 1rem;
+    }
+    
+    .success-message {
+        padding: 40px 20px;
+    }
+    
+    .success-icon {
+        font-size: 48px;
+    }
+    
+    .booking-details {
+        padding: 16px;
+    }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="booking-page">
+    <div class="booking-container">
+        <h2>📅 Book Your Appointment</h2>
+        
+        <form id="bookingForm">
+            <div class="form-group">
+                <label for="clinic">Clinic *</label>
+                <select id="clinic" name="clinic" required>
+                    <option value="">Select a clinic</option>
+                    {% for clinic in clinics %}
+                    <option value="{{ clinic.id }}" {% if selected_clinic_id == clinic.id %}selected{% endif %}>
+                        {{ clinic.name }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="symptoms">Symptoms / Reason for Visit *</label>
+                <textarea id="symptoms" name="symptoms" required placeholder="Describe your symptoms or reason for visit..."></textarea>
+            </div>
+
+            <div class="date-time-grid">
+                <div class="form-group">
+                    <label for="date">Preferred Date *</label>
+                    <input type="date" id="date" name="date" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="time">Preferred Time *</label>
+                    <select id="time" name="time" required>
+                        <option value="">Select time</option>
+                        <option value="09:00">09:00 AM</option>
+                        <option value="09:30">09:30 AM</option>
+                        <option value="10:00">10:00 AM</option>
+                        <option value="10:30">10:30 AM</option>
+                        <option value="11:00">11:00 AM</option>
+                        <option value="11:30">11:30 AM</option>
+                        <option value="14:00">02:00 PM</option>
+                        <option value="14:30">02:30 PM</option>
+                        <option value="15:00">03:00 PM</option>
+                        <option value="15:30">03:30 PM</option>
+                        <option value="16:00">04:00 PM</option>
+                        <option value="16:30">04:30 PM</option>
+                        <option value="17:00">05:00 PM</option>
+                        <option value="17:30">05:30 PM</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="name">Your Name *</label>
+                <input type="text" id="name" name="name" required placeholder="Enter your full name">
+            </div>
+
+            <div class="form-group">
+                <label for="phone">Phone Number *</label>
+                <input type="tel" id="phone" name="phone" required placeholder="Enter your phone number">
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email (Optional)</label>
+                <input type="email" id="email" name="email" placeholder="Enter your email">
+            </div>
+
+            <button type="submit" class="submit-btn" id="submitBtn">
+                Book Appointment
+            </button>
+        </form>
+
+        <div id="successMessage" style="display: none;" class="success-message">
+            <div class="success-icon">✅</div>
+            <h2>Appointment Booked Successfully!</h2>
+            <div class="booking-details">
+                <p><strong>Booking ID:</strong> <span id="bookingId"></span></p>
+                <p><strong>Clinic:</strong> <span id="bookingClinic"></span></p>
+                <p><strong>Date:</strong> <span id="bookingDate"></span></p>
+                <p><strong>Time:</strong> <span id="bookingTime"></span></p>
+                <p><strong>Patient:</strong> <span id="bookingName"></span></p>
+            </div>
+            <p style="color: var(--gray-600); margin-top: 16px;">
+                📞 The clinic will contact you at <strong id="bookingPhone"></strong> to confirm your appointment.
+            </p>
+            <button onclick="window.location.href='/'" class="btn btn-primary" style="margin-top: 24px;">
+                Back to Home
+            </button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Set minimum date to tomorrow
+const dateInput = document.getElementById('date');
+const tomorrow = new Date();
+tomorrow.setDate(tomorrow.getDate() + 1);
+dateInput.min = tomorrow.toISOString().split('T')[0];
+
+// Handle form submission
+document.getElementById('bookingForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const submitBtn = document.getElementById('submitBtn');
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Booking...';
+    
+    // Combine date and time into ISO format
+    const date = document.getElementById('date').value;
+    const time = document.getElementById('time').value;
+    const preferredTime = `${date}T${time}:00`;
+    
+    const formData = {
+        clinic: parseInt(document.getElementById('clinic').value),
+        symptoms_summary: document.getElementById('symptoms').value,
+        preferred_time: preferredTime,
+        patient_name: document.getElementById('name').value,
+        patient_phone: document.getElementById('phone').value,
+        urgency_level: 'medium'
+    };
+    
+    console.log('Sending booking data:', formData);
+    
+    try {
+        const response = await fetch('/api/book-appointment', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formData)
+        });
+        
+        if (!response.ok) {
+            const errorData = await response.json();
+            console.error('Server error:', errorData);
+            throw new Error('Booking failed');
+        }
+        
+        const data = await response.json();
+        console.log('Booking success:', data);
+        
+        // Show success message
+        document.getElementById('bookingForm').style.display = 'none';
+        document.getElementById('successMessage').style.display = 'block';
+        
+        // Fill in booking details
+        document.getElementById('bookingId').textContent = '#' + data.id;
+        document.getElementById('bookingClinic').textContent = document.getElementById('clinic').selectedOptions[0].text;
+        document.getElementById('bookingDate').textContent = date;
+        document.getElementById('bookingTime').textContent = document.getElementById('time').selectedOptions[0].text;
+        document.getElementById('bookingName').textContent = formData.patient_name;
+        document.getElementById('bookingPhone').textContent = formData.patient_phone;
+        
+    } catch (error) {
+        console.error('Booking error:', error);
+        alert('Failed to book appointment. Please try again.');
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Book Appointment';
+    }
+});
+</script>
+{% endblock %}
